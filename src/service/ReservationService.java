@@ -28,7 +28,14 @@ public class ReservationService {
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
         Reservation newReservation = new Reservation(customer, room, checkInDate, checkOutDate);
-        reservations.put(customer.getEmail(), newReservation);
+
+        try {
+            reservations.put(customer.getEmail(), newReservation);
+        }
+        catch (NullPointerException ex) {
+            System.out.println("Cannot book reservation. No customer exists with that email address.");
+            return null;
+        }
 
         return newReservation;
     }

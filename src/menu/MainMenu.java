@@ -66,7 +66,11 @@ public class MainMenu {
     // 1. Find and Reserve a room
     public void findAndReserveARoom() {
         // Get the Check In and Check Out dates.
-        Date[] checkInCheckOut = getCheckInAndCheckOut();
+        Date[] checkInCheckOut = null;
+
+        while (checkInCheckOut == null) {
+            checkInCheckOut = getCheckInAndCheckOut();
+        }
         Calendar newCheckIn = Calendar.getInstance();
         Calendar newCheckOut = Calendar.getInstance();
 
@@ -120,15 +124,14 @@ public class MainMenu {
 
         if(bookRoom) {
             haveAccount = isHaveAccount();
-        }
-
-        // If user has account, book reservation.
-        if(haveAccount) {
-            bookRoom(checkInCheckOut[0], checkInCheckOut[1]);
-        }
-        else {
-            createAnAccount();
-            bookRoom(checkInCheckOut[0], checkInCheckOut[1]);
+            // If user has account, book reservation.
+            if(haveAccount) {
+                bookRoom(checkInCheckOut[0], checkInCheckOut[1]);
+            }
+            else {
+                createAnAccount();
+                bookRoom(checkInCheckOut[0], checkInCheckOut[1]);
+            }
         }
     }
 
@@ -136,14 +139,28 @@ public class MainMenu {
         Date[] checkInCheckOutDates = new Date[2];
 
         System.out.println("Enter Check In Date mm/dd/yyyy, example 02/21/2020");
-        String[] dateInput = scanner.next().split("/");
-        calendar.set(Integer.parseInt(dateInput[2]), Integer.parseInt(dateInput[0]), Integer.parseInt(dateInput[1]));
-        Date checkIn = calendar.getTime();
+        Date checkIn = new Date();
+        try {
+            String[] dateInput = scanner.next().split("/");
+            calendar.set(Integer.parseInt(dateInput[2]), Integer.parseInt(dateInput[0]), Integer.parseInt(dateInput[1]));
+            checkIn = calendar.getTime();
+        }
+        catch (Exception ex) {
+            System.out.println("Invalid Check In date entered.");
+            return null;
+        }
 
         System.out.println("Enter Check Out Date mm/dd/yyyy, example 02/21/2020");
-        String[] dateOutput = scanner.next().split("/");
-        calendar.set(Integer.parseInt(dateOutput[2]), Integer.parseInt(dateOutput[0]), Integer.parseInt(dateOutput[1]));
-        Date checkOut = calendar.getTime();
+        Date checkOut = new Date();
+        try {
+            String[] dateOutput = scanner.next().split("/");
+            calendar.set(Integer.parseInt(dateOutput[2]), Integer.parseInt(dateOutput[0]), Integer.parseInt(dateOutput[1]));
+            checkOut = calendar.getTime();
+        }
+        catch (Exception ex) {
+            System.out.println("Invalid Check Out date entered.");
+            return null;
+        }
 
         checkInCheckOutDates[0] = checkIn;
         checkInCheckOutDates[1] = checkOut;
@@ -188,7 +205,10 @@ public class MainMenu {
         System.out.println("What room number would you like to reserve?");
         roomNumber = scanner.next();
         Reservation bookedRoom = hotelResource.bookARoom(email, hotelResource.getRoom(roomNumber), checkInDate, checkOutDate);
-        System.out.println(bookedRoom);
+
+        if (bookedRoom != null) {
+            System.out.println(bookedRoom);
+        }
     }
 
     // 2. See my reservations

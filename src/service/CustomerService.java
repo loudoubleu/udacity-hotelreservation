@@ -24,7 +24,7 @@ public class CustomerService {
         try {
             return customers.get(customerEmail);
         }
-        catch (NullPointerException ex) {
+        catch (Exception ex) {
             System.out.println(customerEmail + " is not a registered email.");
         }
 

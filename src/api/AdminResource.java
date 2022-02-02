@@ -28,7 +28,6 @@ public class AdminResource {
         double roomPrice = 0.0;
         RoomType roomType;
         int roomTypeInput = 0;
-        //boolean isFreeRoom = false;
         boolean anotherRoom = true;
 
         while(anotherRoom) {
@@ -45,6 +44,7 @@ public class AdminResource {
             }
             else {
                 System.out.println("Invalid room type");
+                break;
             }
 
             System.out.println("Is this a free room? y/n");

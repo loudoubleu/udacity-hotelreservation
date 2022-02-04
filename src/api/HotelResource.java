@@ -6,8 +6,10 @@ import model.Reservation;
 import service.CustomerService;
 import service.ReservationService;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 public class HotelResource {
     private static HotelResource hotelResource = new HotelResource();
@@ -36,8 +38,8 @@ public class HotelResource {
         return reservationService.reserveARoom(customerService.getCustomer(customerEmail), room, checkInDate, checkOutDate);
     }
 
-    public Collection<Reservation> getCustomerReservations(String customerEmail) {
-        return (Collection<Reservation>) reservationService.getCustomerReservation(customerService.getCustomer(customerEmail));
+    public ArrayList<Reservation> getCustomerReservations(String customerEmail) {
+        return reservationService.getCustomerReservation(customerService.getCustomer(customerEmail));
     }
 
     public Collection<IRoom> findARoom(Date checkIn, Date checkOut) {

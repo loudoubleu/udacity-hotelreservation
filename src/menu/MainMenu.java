@@ -111,9 +111,6 @@ public class MainMenu {
                     }
                 });
                 break;
-//            for (IRoom room : rooms) {
-//                System.out.println(room);
-//            }
             }
         } while (checkForAvailableRooms);
 
@@ -142,7 +139,7 @@ public class MainMenu {
         Date checkIn = new Date();
         try {
             String[] dateInput = scanner.next().split("/");
-            calendar.set(Integer.parseInt(dateInput[2]), Integer.parseInt(dateInput[0]), Integer.parseInt(dateInput[1]));
+            calendar.set(Integer.parseInt(dateInput[2]), Integer.parseInt(dateInput[0]) - 1, Integer.parseInt(dateInput[1]));
             checkIn = calendar.getTime();
         }
         catch (Exception ex) {
@@ -154,7 +151,7 @@ public class MainMenu {
         Date checkOut = new Date();
         try {
             String[] dateOutput = scanner.next().split("/");
-            calendar.set(Integer.parseInt(dateOutput[2]), Integer.parseInt(dateOutput[0]), Integer.parseInt(dateOutput[1]));
+            calendar.set(Integer.parseInt(dateOutput[2]), Integer.parseInt(dateOutput[0]) - 1, Integer.parseInt(dateOutput[1]));
             checkOut = calendar.getTime();
         }
         catch (Exception ex) {
@@ -213,12 +210,14 @@ public class MainMenu {
 
     // 2. See my reservations
     public void seeMyReservations() {
-        System.out.println("Enter Email (format: name@domain.com");
+        System.out.println("Enter Email (format: name@domain.com)");
         String email = scanner.next();
 
-        Reservation customerReservation = (Reservation) hotelResource.getCustomerReservations(email);
-        if (customerReservation != null) {
-            System.out.println(customerReservation);
+        ArrayList<Reservation> customerReservations = hotelResource.getCustomerReservations(email);
+        if (customerReservations.size() > 0) {
+            for (Reservation reservation : customerReservations) {
+                System.out.println(reservation);
+            }
         }
     }
 

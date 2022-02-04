@@ -1,15 +1,12 @@
 package service;
 
-import model.Customer;
-import model.IRoom;
-import model.Reservation;
-import model.Room;
+import model.*;
 
 import java.util.*;
 
 public class ReservationService {
     private static ReservationService reservationService = new ReservationService();
-    Map<String, Reservation> reservations = new HashMap<>();
+    ArrayList<Reservation> reservations = new ArrayList<>();
     Map<String, IRoom> rooms = new HashMap<>();
 
     private ReservationService() {}
@@ -18,8 +15,57 @@ public class ReservationService {
         return reservationService;
     }
 
-    public void addRoom(IRoom room) {
-        rooms.put(room.getRoomNumber(), room);
+    public void addRoom(HashMap<String, IRoom> rooms) {
+        Room newRoom = new Room();
+        Scanner scanner = new Scanner(System.in);
+        String roomNumber = "";
+        double roomPrice = 0.0;
+        RoomType roomType;
+        int roomTypeInput = 0;
+        boolean anotherRoom = true;
+
+        while(anotherRoom) {
+            System.out.println("Enter room number");
+            roomNumber = scanner.next();
+
+            System.out.println("Enter room type: 1 for single bed, 2 for double bed");
+            roomTypeInput = scanner.nextInt();
+            roomType = getRoomType(roomTypeInput);
+            if (roomType == null) {
+                System.out.println("Invalid room type");
+                break;
+            }
+
+            System.out.println("Is this a free room? y/n");
+            String freeRoomInput = scanner.next();
+            if(freeRoomInput.equals("y")) {
+                //isFreeRoom = true;
+                newRoom = new FreeRoom(roomNumber, roomPrice, roomType = roomTypeInput == 1 ? RoomType.SINGLE : RoomType.DOUBLE);
+            }
+            else {
+                System.out.println("Enter price per night");
+                roomPrice = scanner.nextDouble();
+                newRoom = new Room(roomNumber, roomPrice, roomType = roomTypeInput == 1 ? RoomType.SINGLE : RoomType.DOUBLE, false);
+            }
+            rooms.put(roomNumber, newRoom);
+
+            System.out.println("Would you like to add another room? y/n");
+            String anotherRoomInput = scanner.next();
+            anotherRoom = anotherRoomInput.equals("y") ? true : false;
+        }
+    }
+
+    RoomType getRoomType(int roomTypeAsInt) {
+        RoomType roomType = null;
+
+        if(roomTypeAsInt == 1) {
+            roomType = RoomType.SINGLE;
+        }
+        else if (roomTypeAsInt == 2) {
+            roomType = RoomType.DOUBLE;
+        }
+
+        return roomType;
     }
 
     public IRoom getARoom(String roomId) {
@@ -30,7 +76,7 @@ public class ReservationService {
         Reservation newReservation = new Reservation(customer, room, checkInDate, checkOutDate);
 
         try {
-            reservations.put(customer.getEmail(), newReservation);
+            reservations.add(newReservation);
         }
         catch (NullPointerException ex) {
             System.out.println("Cannot book reservation. No customer exists with that email address.");
@@ -52,8 +98,8 @@ public class ReservationService {
             availableRooms = new ArrayList<IRoom>(rooms.values());
         }
         else {
-            for (String key : reservations.keySet()) {
-                tempReservation = reservations.get(key);
+            for (Reservation reservation : reservations) {
+                tempReservation = reservation;
                 tempCheckIn = tempReservation.getCheckInDate();
                 tempCheckOut = tempReservation.getCheckOutDate();
 
@@ -85,9 +131,17 @@ public class ReservationService {
         return (HashMap<String, IRoom>) rooms;
     }
 
-    public Collection<Reservation> getCustomerReservation(Customer customer) {
+    public ArrayList<Reservation> getCustomerReservation(Customer customer) {
         try {
-            return (Collection<Reservation>)reservations.get(customer.getEmail());
+            ArrayList<Reservation> customerReservations = new ArrayList<>();
+
+            reservations.forEach(reservation -> {
+                if (reservation.getCustomer().getEmail().equals(customer.getEmail())) {
+                    customerReservations.add(reservation);
+                }
+            });
+
+            return customerReservations;
         }
         catch (NullPointerException ex) {
             System.out.println("There are no reservations for this Customer");
@@ -101,7 +155,7 @@ public class ReservationService {
             System.out.println("There are no reservations to display.");
         }
         else {
-            for(Reservation reservation : reservations.values()) {
+            for(Reservation reservation : reservations) {
                 System.out.println(reservation);
             }
         }

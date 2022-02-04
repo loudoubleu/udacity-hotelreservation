@@ -127,24 +127,24 @@ public class AdminMenu {
 
         // Add test Reservations
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("01"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("01"));
         Date checkIn = calendar.getTime();
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("07"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("07"));
         Date checkOut = calendar.getTime();
         hotelResource.bookARoom("jb@theservice.com", hotelResource.getRoom("100"), checkIn, checkOut);
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("08"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("08"));
         checkIn = calendar.getTime();
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("13"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("13"));
         checkOut = calendar.getTime();
         hotelResource.bookARoom("simon@thesaint.com", hotelResource.getRoom("200"), checkIn, checkOut);
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("14"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("14"));
         checkIn = calendar.getTime();
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("19"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("19"));
         checkOut = calendar.getTime();
         hotelResource.bookARoom("ehunt@mif.com", hotelResource.getRoom("301"), checkIn, checkOut);
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("20"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("20"));
         checkIn = calendar.getTime();
-        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02"), Integer.parseInt("25"));
+        calendar.set(Integer.parseInt("2022"), Integer.parseInt("02") - 1, Integer.parseInt("25"));
         checkOut = calendar.getTime();
         hotelResource.bookARoom("xxx@xagents.com", hotelResource.getRoom("302"), checkIn, checkOut);
     }
